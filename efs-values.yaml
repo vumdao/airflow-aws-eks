@@ -1,0 +1,25 @@
+# Run `helm upgrade -i aws-efs-csi-driver aws-efs-csi-driver/aws-efs-csi-driver --values values.yaml -n kube-system`
+controller:
+  tolerations:
+    - key: 'dedicated'
+      operator: 'Equal'
+      value: 'airflow'
+      effect: 'NoSchedule'
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: role
+            operator: In
+            values:
+            - airflow
+
+node:
+  tolerations:
+    - key: 'dedicated'
+      operator: 'Equal'
+      value: 'airflow'
+      effect: 'NoSchedule'
+  nodeSelector:
+    role: airflow
